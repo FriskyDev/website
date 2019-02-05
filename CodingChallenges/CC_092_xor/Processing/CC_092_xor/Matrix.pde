@@ -1,14 +1,20 @@
 // https://github.com/CodingTrain/Toy-Neural-Network-JS
 // Processing transcription: Chuck England
 
+interface FunctionMapper {
+  float Map(float x, int i, int j);
+};
+
 class Matrix {
   int rows;
   int cols;
   float data[][];
+  
 
   Matrix(int rows_, int cols_) {
     rows = rows_;
     cols = cols_;
+    data = new float[rows][cols];
     //data = Array(rows).fill().map(() => Array(cols).fill(0));
   }
 
@@ -38,7 +44,11 @@ class Matrix {
   //}
 
   Matrix randomize() {
-    return map((e) -> Math.random() * 2 - 1);
+    return map(new FunctionMapper() {
+      public float Map(float x, int i, int j) {
+        return (float) Math.random() * 2 - 1;
+      }
+    });
   }
 
   //Matrix add(n) {
@@ -91,12 +101,12 @@ class Matrix {
   //  }
   //}
 
-  Matrix map(func) {
+  Matrix map(FunctionMapper fm) {
     // Apply a function to every element of matrix
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < cols; j++) {
         float val = data[i][j];
-        data[i][j] = func(val, i, j);
+        data[i][j] = fm.Map(val, i, j);
       }
     }
     return this;

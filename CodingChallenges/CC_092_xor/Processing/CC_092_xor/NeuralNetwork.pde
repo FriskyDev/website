@@ -35,24 +35,27 @@ class NeuralNetwork {
   int output_nodes;
   Matrix weights_ih;
   Matrix weights_ho;
+  Matrix bias_h;
+  Matrix bias_o;
+  ActivationFunction activation_function;
   
   NeuralNetwork(int input_nodes_, int hidden_nodes_, int output_nodes_) {
     input_nodes = input_nodes_;
     hidden_nodes = hidden_nodes_;
     output_nodes = output_nodes_;
 
-  weights_ih = new Matrix(hidden_nodes, input_nodes);
-  weights_ho = new Matrix(output_nodes, hidden_nodes);
-  weights_ih.randomize();
-  weights_ho.randomize();
+    weights_ih = new Matrix(hidden_nodes, input_nodes);
+    weights_ho = new Matrix(output_nodes, hidden_nodes);
+    weights_ih.randomize();
+    weights_ho.randomize();
 
-  //  this.bias_h = new Matrix(this.hidden_nodes, 1);
-  //  this.bias_o = new Matrix(this.output_nodes, 1);
-  //  this.bias_h.randomize();
-  //  this.bias_o.randomize();
-  setLearningRate();
+    bias_h = new Matrix(this.hidden_nodes, 1);
+    bias_o = new Matrix(this.output_nodes, 1);
+    bias_h.randomize();
+    bias_o.randomize();
+    setLearningRate();
 
-  //  this.setActivationFunction();
+    setActivationFunction();
   }
 
   //predict(input_array) {
@@ -77,12 +80,16 @@ class NeuralNetwork {
   }
 
   void setLearningRate(float learning_rate) {
-    learning_rate = learning_rate;
+    this.learning_rate = learning_rate;
+  }
+  
+  void setActivationFunction() {
+    setActivationFunction(sigmoid);
   }
 
-  //setActivationFunction(func = sigmoid) {
-  //  this.activation_function = func;
-  //}
+  void setActivationFunction(ActivationFunction func) {
+    activation_function = func;
+  }
 
   void train(float input_array[], float target_array[]) {
     //// Generating the Hidden Outputs
